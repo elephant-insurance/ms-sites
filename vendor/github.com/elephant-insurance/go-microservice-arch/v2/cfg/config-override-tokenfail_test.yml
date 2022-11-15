@@ -1,0 +1,6 @@
+RequiredConfig:
+  Environment: ENVIRONMENTTOKEN
+  LogLevel: LOGLEVELTOKEN
+  ServiceID: test
+Str1: String1 Overridden
+Strptr1: STRINGPTR1TOKEN

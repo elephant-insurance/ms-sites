@@ -1,0 +1,11 @@
+# we use yaml because yaml supports comments
+RequiredConfig:
+  AllowedHeaders: x-test
+  AllowedMethods: POST,PUT
+  AllowedOrigins: "*"
+  AppAbbreviation: MSARC
+  DevTestListenPort: 4040
+  Environment: dev
+  InstanceName: arch-test
+  LogLevel: info
+  ServiceID: test

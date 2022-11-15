@@ -1,0 +1,15 @@
+RequiredConfig:
+  OverrideConfigPath: ./config-override-tokenfail_test.yml
+  Environment: dev
+  LogLevel: info
+  ServiceID: test
+Str1: String 1
+Str2: String 2
+Str3: String 4
+Strptr1: String pointer 1
+Strptr2: String pointer 2
+Strptr3: String pointer 4
+Int1: 1234
+Int2: 2345
+Int3: 3456
+TimePtr: 2018-08-01T17:25:50.179949-04:00

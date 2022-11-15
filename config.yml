@@ -1,0 +1,27 @@
+---
+RequiredConfig:
+  # To enable compressed requests, this must be set to true IN THE OVERRIDE FILE
+  # Only do this for internal-only services that accept large text documents!
+  AllowCompressedRequests: false
+  AllowedMethods: GET
+  AllowedOrigins: "*.elephant.com,*.apparent.com"
+  AppAbbreviation: MSSITES
+  Environment: dev
+  LogLevel: debug
+  OverrideConfigPath: /etc/ms-sites/config.yml
+  ServiceID: ms-template
+Diagnostics:
+  Branch: branch_placeholder
+  Build: build_placeholder
+  Commit: commit_placeholder
+  DateBuilt: datebuilt_placeholder
+  ImageTag: imagetag_placeholder
+Logging:
+  AzureSharedKey: LT7eAZ+9MH3irsVELYcRYtzckJGdzACM6uTlT0zD36aY7p4q9/38WrDCVpcUY8Cd9pzH5XPnqjX3PRD0vdg8/Q==
+  AzureWorkspaceID: 29cd79ea-5a7c-4fbd-a139-df2438a6506e
+  ConsoleMode: ConsoleModeStandardOut
+  HostURL: SendToAzure
+Security:
+  AccessKey1: howdy
+  AccessKey2: doody
+  BypassInDev: true

@@ -1,0 +1,2 @@
+MSAPLG_AzureSharedKey=eJdtXPBmKLynulNXzv0zqiN5tXPa6L6K19qpbmQs4UeonOqDKUcWD3RaV0huKlYDRF/K8AzbIjxq/Zi64M7y7g==
+MSAPLG_AzureWorkspaceID=a4c56fcf-27b5-47d2-b207-3d28d35f57c9

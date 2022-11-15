@@ -1,0 +1,9 @@
+---
+RequiredConfig:
+  Environment: SED_Environment
+  LogLevel: SED_LogLevel
+Logging:
+  AzureSharedKey: SED_AZURE_LOG_KEY_e-web-service-lgan-eastus
+  AzureWorkspaceID: SED_AZURE_LOG_WORKSPACE_ID_e-web-service-lgan-eastus
+  ConsoleMode: ConsoleModeSendOrStandardOut
+  HostURL: SendToAzure
