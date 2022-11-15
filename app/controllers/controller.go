@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"net/http"
 	"path/filepath"
 	"strings"
 
@@ -13,14 +12,18 @@ import (
 func HandleGetDocument(c *gin.Context) {
 
 	lw := log.ForFunc(c).Debug(`called`)
+	var docPath string
+	project := c.Param("project")
+	doc := c.Param("document")
 
-	pName := c.Param("project")
-	dName := c.Param("document")
-	fileExtension := filepath.Ext(dName)
+	if doc == "" {
+		docPath = project + "/index.html"
+	} else {
+		docPath = project + `/` + doc
+	}
 
-	filePath := pName + `/` + dName
-
-	if downloadData, found := services.AllContents[filePath]; found {
+	if downloadData, found := services.AllContents[docPath]; found {
+		fileExtension := filepath.Ext(docPath)
 
 		mimeType := services.DetectMimeType(strings.Split(fileExtension, ".")[1])
 		// mimeType := http.DetectContentType(downloadData)
@@ -51,20 +54,4 @@ func HandleGetDocument(c *gin.Context) {
 	// 	bc.RenderJSONResponse(c, http.StatusOK, doc)
 	// }
 	lw.Debug(`complete`)
-}
-
-func HandleGetIndex(c *gin.Context) {
-
-	pName := "index.html"
-
-	if downloadData, found := services.AllContents[pName]; found {
-		// c.Header("Content-Type", "text/html")
-
-		// c.Header("Content-Disposition", "attachment")
-
-		c.Data(http.StatusOK, "text/html", downloadData)
-		// resource := bytes.NewBuffer(downloadData)
-		// _, _ = io.Copy(c.Writer, resource)
-
-	}
 }

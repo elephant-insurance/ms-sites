@@ -19,7 +19,6 @@ func Initialize(requiredConfig cfg.Configurator, g *gin.Engine) *routes.Router {
 
 	appRouter = routes.New(requiredConfig, g)
 
-	appRouter.GET(routeNameGetIndex, pathGetIndex, c.HandleGetIndex)
 	appRouter.GET(routeNameGetDocument, pathGetDocument, c.HandleGetDocument)
 
 	// g.Static("sites/go-ang-2", "./go-ang-2/dist/go-ang-2")
