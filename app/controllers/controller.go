@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"net/http"
 	"path/filepath"
 	"strings"
 
+	"github.com/elephant-insurance/go-microservice-arch/v2/bc"
+	"github.com/elephant-insurance/go-microservice-arch/v2/dig"
 	"github.com/elephant-insurance/go-microservice-arch/v2/log"
+	"github.com/elephant-insurance/go-microservice-arch/v2/uf"
 	"github.com/elephant-insurance/ms-sites/app/services"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +26,9 @@ func HandleGetDocument(c *gin.Context) {
 		docPath = project + `/` + doc
 	}
 
+	retrieveTimer := dig.StartClientTiming(c, uf.Pointer.ToString(`retrieve-doc`), nil)
 	if downloadData, found := services.AllContents[docPath]; found {
+		retrieveTimer.Stop(http.StatusOK)
 		fileExtension := filepath.Ext(docPath)
 
 		mimeType := services.DetectMimeType(strings.Split(fileExtension, ".")[1])
@@ -34,6 +40,9 @@ func HandleGetDocument(c *gin.Context) {
 		// resource := bytes.NewBuffer(downloadData)
 		// _, _ = io.Copy(c.Writer, resource)
 		c.Writer.Write(downloadData)
+	} else {
+		retrieveTimer.Stop(http.StatusNotFound)
+		bc.SayNotFound(c)
 	}
 	// resource := c.Param("resource")
 
@@ -44,14 +53,5 @@ func HandleGetDocument(c *gin.Context) {
 	// }
 
 	// c.JSON(200, gin.H{})
-
-	// retrieveTimer := dig.StartClientTiming(c, uf.Pointer.ToString(`retrieve-doc`), nil)
-	// if doc, err := services.RetrieveDocument(c, docID); err != nil {
-	// 	retrieveTimer.Stop(http.StatusNotFound)
-	// 	bc.SayNotFound(c)
-	// } else {
-	// 	retrieveTimer.Stop(http.StatusOK)
-	// 	bc.RenderJSONResponse(c, http.StatusOK, doc)
-	// }
 	lw.Debug(`complete`)
 }
