@@ -3,6 +3,7 @@ module github.com/elephant-insurance/ms-sites
 go 1.19
 
 require (
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.2.0
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.5.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elephant-insurance/enumerations/v2 v2.9.18
@@ -12,7 +13,6 @@ require (
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.2.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.1.1 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 // indirect
 	github.com/fatih/color v1.13.0 // indirect
