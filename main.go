@@ -67,17 +67,7 @@ func main() {
 func setupApplicationPackages(c context.Context) {
 	lw := log.ForFunc(c)
 	bs := services.NewBlobService(cfg.Config.StorageAccountName, cfg.Config.StorageAccountKey, "singlesearch")
-	bs.Initialize()
-	// bs.InitializeConnection()
-	// bs.DownloadFile("index.html")
-	// bs.DownloadFile("runtime.0c5abce44f127795.js")
-	// bs.DownloadFile("main.e92dd16baec1db9c.js")
-	// bs.DownloadFile("polyfills.e0fb99aba5587dea.js")
-	// bs.DownloadFile("3rdpartylicenses.txt")
-	// bs.DownloadFile("styles.ef46db3751d8e999.css")
-	// bs.DownloadFile("favicon.ico")
-
-	// log.DebugDump(services.Projects[0].Files)
+	cfg.BlobService = bs
 	lw.Debug(`application package initialization complete`)
 }
 

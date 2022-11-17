@@ -5,10 +5,14 @@ import (
 	"github.com/elephant-insurance/go-microservice-arch/v2/dig"
 	"github.com/elephant-insurance/go-microservice-arch/v2/log"
 	"github.com/elephant-insurance/go-microservice-arch/v2/sec"
+	"github.com/elephant-insurance/ms-sites/app/services"
 )
 
 // Config for the ms-sites web service
-var Config *AppConfig
+var (
+	Config      *AppConfig
+	BlobService *services.BlobService
+)
 
 // Initialize loads the configuration
 func Initialize(testConfig *AppConfig) {
