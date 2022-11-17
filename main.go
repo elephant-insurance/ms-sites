@@ -13,6 +13,7 @@ import (
 	"github.com/elephant-insurance/go-microservice-arch/v2/sec"
 
 	"github.com/elephant-insurance/ms-sites/app/cfg"
+	"github.com/elephant-insurance/ms-sites/app/controllers"
 	"github.com/elephant-insurance/ms-sites/app/routes"
 	"github.com/elephant-insurance/ms-sites/app/services"
 )
@@ -67,7 +68,7 @@ func main() {
 func setupApplicationPackages(c context.Context) {
 	lw := log.ForFunc(c)
 	bs := services.NewBlobService(cfg.Config.StorageAccountName, cfg.Config.StorageAccountKey, "singlesearch")
-	cfg.BlobService = bs
+	services.Blob = bs
 	lw.Debug(`application package initialization complete`)
 }
 
@@ -76,6 +77,8 @@ func setupApplicationPackages(c context.Context) {
 func setupDiagnostics(c context.Context) {
 	lw := log.ForFunc(c)
 	dig.AddPackageStats("default-log", log.Diagnostics)
+	dig.AddPackageStats("cache-info", controllers.Diagnostics)
+	dig.AddDiagnosticTest("storage-container-connection-test", services.TestContainer)
 	// uncomment if we're using compressed requests
 	// dig.AddPackageStats(`gzip`, gzip.Diagnostics)
 	lw.Debug(`diagnostic tests and stats methods initialized`)

@@ -5,12 +5,20 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/elephant-insurance/go-microservice-arch/v2/clicker"
 	"github.com/elephant-insurance/go-microservice-arch/v2/dig"
 	"github.com/elephant-insurance/go-microservice-arch/v2/log"
 	"github.com/elephant-insurance/go-microservice-arch/v2/uf"
-	"github.com/elephant-insurance/ms-sites/app/cfg"
 	"github.com/elephant-insurance/ms-sites/app/services"
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	CacheHits *clicker.Clicker = &clicker.Clicker{}
+	CacheMiss *clicker.Clicker = &clicker.Clicker{}
+
+	timinigLabelCacheHits = uf.Pointer.ToString(`cache-hits`)
+	timinigLabelCacheMiss = uf.Pointer.ToString(`cache-miss`)
 )
 
 func HandleGetDocument(c *gin.Context) {
@@ -32,15 +40,16 @@ func HandleGetDocument(c *gin.Context) {
 	// check if the doc is in cache
 	if downloadData, cacheHit := services.FindInCache(docPath); cacheHit {
 		lw.Debug("Cache hit")
-
+		CacheHits.Click(1)
 		retrieveTimer.Stop(http.StatusOK)
 		c.Header("Content-Type", mimeType)
 		c.Writer.Write(downloadData)
 
 	} else {
 		lw.Debug("Cache miss")
+		CacheMiss.Click(1)
 		//download tarball and unzip and cache
-		err, statusCode := cfg.BlobService.DownloadFiles(c, project)
+		err, statusCode := services.Blob.DownloadFiles(c, project)
 		if err != nil {
 			retrieveTimer.Stop(statusCode)
 			if statusCode == http.StatusNotFound {
@@ -60,4 +69,11 @@ func HandleGetDocument(c *gin.Context) {
 	}
 
 	lw.Debug(`complete`)
+}
+
+func Diagnostics() map[string]interface{} {
+	return map[string]interface{}{
+		`cache-hits`: CacheHits.Clicks,
+		`cache-miss`: CacheMiss.Clicks,
+	}
 }

@@ -24,6 +24,8 @@ type BlobService struct {
 	client        *azblob.Client
 }
 
+var Blob *BlobService
+
 const (
 	cacheExpirationSeconds = 30
 	cachePurgeSeconds      = 60
@@ -36,7 +38,7 @@ func NewBlobService(name, key, cName string) *BlobService {
 	return &bs
 }
 
-func (bs *BlobService) initializeClient() (*azblob.Client, error) {
+func (bs *BlobService) initializeClient(c msrqc.Context) (*azblob.Client, error) {
 	blobURL := fmt.Sprintf("https://%s.blob.core.windows.net/", bs.accountName)
 	credential, _ := azblob.NewSharedKeyCredential(bs.accountName, bs.accountKey)
 	fmt.Print(blobURL)
@@ -45,10 +47,17 @@ func (bs *BlobService) initializeClient() (*azblob.Client, error) {
 
 }
 
+func (bs *BlobService) ensureContainer(c msrqc.Context) error {
+
+	_, err := bs.client.CreateContainer(c, bs.containerName, &azblob.CreateContainerOptions{})
+	return err
+
+}
+
 func (bs *BlobService) DownloadFiles(c msrqc.Context, name string) (error, int) {
 	lw := log.ForFunc(c)
 	var downloadedData *bytes.Buffer
-	client, err := bs.initializeClient()
+	client, err := bs.initializeClient(c)
 	if err != nil {
 		return err, http.StatusInternalServerError
 	}
@@ -107,12 +116,4 @@ func (bs *BlobService) unzipTar(c msrqc.Context, buff *bytes.Buffer) {
 			cache.Set(hdr.Name, buf, 0)
 		}
 	}
-}
-
-func FindInCache(docPath string) ([]byte, bool) {
-	downloadData, found := cache.Get(docPath)
-	if found {
-		return downloadData.([]byte), found
-	}
-	return nil, false
 }
