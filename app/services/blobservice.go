@@ -56,7 +56,7 @@ func (bs *BlobService) ensureContainer(c msrqc.Context) error {
 
 func (bs *BlobService) DownloadFiles(c msrqc.Context, name string) (error, int) {
 	lw := log.ForFunc(c)
-	var downloadedData *bytes.Buffer
+	var downloadedData bytes.Buffer
 	client, err := bs.initializeClient(c)
 	if err != nil {
 		return err, http.StatusInternalServerError
@@ -84,15 +84,14 @@ func (bs *BlobService) DownloadFiles(c msrqc.Context, name string) (error, int) 
 	if errClose != nil {
 		lw.WithError(errClose).Error("error closing blob stream")
 	}
-
-	downloadedData = bytes.NewBuffer(actualBlobData)
+	downloadedData = *bytes.NewBuffer(actualBlobData)
 	bs.unzipTar(c, downloadedData)
 	return nil, http.StatusOK
 }
 
-func (bs *BlobService) unzipTar(c msrqc.Context, buff *bytes.Buffer) {
+func (bs *BlobService) unzipTar(c msrqc.Context, buff bytes.Buffer) {
 	lw := log.ForFunc(c)
-	archive, err := gzip.NewReader(buff)
+	archive, err := gzip.NewReader(&buff)
 	if err != nil {
 		lw.WithError(err).Error("error creating new gzip reader")
 	}
