@@ -27,7 +27,10 @@ func HandleGetDocument(c *gin.Context) {
 	var docPath string
 	project := c.Param("project")
 	doc := c.Param("document")
-
+	if project == "" {
+		c.Status(http.StatusNotFound)
+		return
+	}
 	if doc == "" {
 		docPath = project + "/index.html"
 	} else {
